@@ -53,6 +53,7 @@ void TBitField::SetBit(const int n) // установить бит
 
 void TBitField::ClrBit(const int n) // очистить бит
 {
+	this->pMem[this->GetMemIndex(n)] | ~(this->GetMemMask(n));
 }
 
 int TBitField::GetBit(const int n) const // получить значение бита
