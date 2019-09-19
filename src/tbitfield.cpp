@@ -58,13 +58,15 @@ void TBitField::ClrBit(const int n) // очистить бит
 
 int TBitField::GetBit(const int n) const // получить значение бита
 {
-  return 0;
+
+  return pMem[this->GetMemIndex(n)] & (this->GetMemMask(n));
 }
 
 // битовые операции
 
 TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 {
+	
 }
 
 int TBitField::operator==(const TBitField &bf) const // сравнение
