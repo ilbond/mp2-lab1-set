@@ -141,10 +141,30 @@ TSet TSet::operator~(void) // дополнение
 
 istream &operator>>(istream &istr, TSet &s) // ввод
 {
+	string str;
+	vector <int> input;
+	int word;
+	cout << str;
+	for (istringstream is(str); is >> word;)
+	{
+		input.push_back(word);
+	}
+	vector<int>::const_iterator it;
+	for (it = input.begin(); it != input.end(); it++)
+	{
+		(s.BitField.SetBit(*it));
+	}
+
 	return istr;
 }
 
 ostream& operator<<(ostream &ostr, const TSet &s) // вывод
 {
+	for (int i = 0; i < s.GetMaxPower(); i++)
+	{
+		if (s.BitField.GetBit(i) > 0)
+			cout << i;
+	}
 	return ostr;
+	
 }

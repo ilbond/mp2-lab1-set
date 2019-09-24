@@ -9,6 +9,8 @@
 #define __BITFIELD_H__
 
 #include <iostream>
+#include <vector>
+#include <sstream>
 
 using namespace std;
 

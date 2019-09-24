@@ -34,7 +34,6 @@ TEST(TBitField, can_set_bit)
   EXPECT_EQ(0, bf.GetBit(3));
 
   bf.SetBit(3);
-  bf.GetBit(3);
   EXPECT_NE(0, bf.GetBit(3));
 }
 
@@ -167,7 +166,6 @@ TEST(TBitField, or_operator_applied_to_bitfields_of_equal_size)
   expBf.SetBit(1);
   expBf.SetBit(2);
   expBf.SetBit(3);
-  bf1 | bf2;
   EXPECT_EQ(expBf, bf1 | bf2);
 }
 

@@ -179,10 +179,26 @@ TBitField TBitField::operator~(void) // отрицание
 
 istream &operator>>(istream &istr, TBitField &bf) // ввод
 {
-	return istr;
-}
+	
+		delete[] bf.pMem;
+		int a;
+		cout << "MemLen: ";
+		istr >> a;
+		bf.MemLen = a;
+		bf.BitLen = a * 32;
+		cout << endl;
+		cout << "pMem: ";
+		for (int i = 0; i < a; i++)
+		{
+			istr >> bf.pMem[i];
+		}
+		return istr;
+	}
+
 
 ostream &operator<<(ostream &ostr, const TBitField &bf) // вывод
 {
+	for (int i = 0; i < bf.BitLen; i++)
+		ostr << bf.GetBit(i);
 	return ostr;
 }
