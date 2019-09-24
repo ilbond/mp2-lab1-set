@@ -24,6 +24,7 @@ TBitField::TBitField(const TBitField &bf) // конструктор копиро
 {
 	MemLen = bf.MemLen;
 	BitLen = bf.BitLen;
+	pMem = new TELEM[MemLen];
 	for (int i = 0; i < MemLen; i++)
 		pMem[i] = bf.pMem[i];
 }
@@ -78,7 +79,10 @@ int TBitField::GetBit(const int n) const // получить значение б
 		if (n < 0)
 			throw 1;
 		else
-			return pMem[this->GetMemIndex(n)] & (this->GetMemMask(n));
+			if (((pMem[GetMemIndex(n)]) & (GetMemMask(n))) > 0)
+				return 1;
+			else
+				return 0;
 	}
 	else throw 1;
 }
@@ -91,7 +95,7 @@ TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 	this->MemLen = bf.MemLen;
 	this->BitLen = bf.BitLen;
 	pMem = new TELEM[MemLen];
-	for (int i = 0; i < bf.MemLen; i++) {
+	for (int i = 0; i < MemLen; i++) {
 		this->pMem[i] = bf.pMem[i];
 	}
 	return *this;
@@ -155,10 +159,20 @@ TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 
 TBitField TBitField::operator~(void) // отрицание
 {
-	for (int i = 0; i < MemLen; i++) {
-		pMem[i]=~(pMem[i]);
+	TBitField res(*this);
+	for (int i = 0; i < res.MemLen; i++) {
+		res.pMem[i]=~(pMem[i]);
+		if (i == (res.MemLen - 1))
+		{
+			int check = res.MemLen * 32 - 1;
+			while (check != (res.BitLen - 1))
+			{
+				res.pMem[MemLen - 1] = res.pMem[MemLen - 1] & (~(1 <<check));
+				check--;
+			}
+		}
 	}
-	return *this;
+	return res;
 }
 
 // ввод/вывод

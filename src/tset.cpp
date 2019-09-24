@@ -25,9 +25,9 @@ TSet::TSet(const TBitField &bf) : BitField(bf)
 	MaxPower = bf.GetLength();
 }
 
-TSet::operator TBitField()
+TSet::operator TBitField() ////aaaa
 {
-	return *this;
+	return BitField;
 }
 
 int TSet::GetMaxPower(void) const // получить макс. к-во эл-тов
@@ -40,7 +40,7 @@ int TSet::IsMember(const int Elem) const // элемент множества?
 		if (BitField.GetBit(Elem) == 1)
 			return 1;
 		else
-            throw 1;
+            return 0;
 }
 
 void TSet::InsElem(const int Elem) // включение элемента множества
@@ -80,27 +80,61 @@ int TSet::operator!=(const TSet &s) const // сравнение
 
 TSet TSet::operator+(const TSet &s) // объединение
 {
-	return *this;
+	int max;
+	if (MaxPower > s.MaxPower)
+		max = MaxPower;
+	else
+		max = s.MaxPower;
+	TSet res(max);
+	res.BitField = (this->BitField) | (s.BitField);
+	return res;
 }
 
 TSet TSet::operator+(const int Elem) // объединение с элементом
 {
-	return *this;
+
+	if (Elem > MaxPower)
+		throw 1;
+	else
+	{
+		TSet res(*this);
+		res.BitField.SetBit(Elem);
+		return res;
+
+	}
+
 }
 
 TSet TSet::operator-(const int Elem) // разность с элементом
 {
-	return *this;
+	if (Elem > MaxPower)
+		throw 1;
+	else
+	{
+		TSet res(*this);
+		res.BitField.ClrBit(Elem);
+		return res;
+
+	}
 }
 
 TSet TSet::operator*(const TSet &s) // пересечение
 {
-	return *this;
+	int max;
+	if (MaxPower > s.MaxPower)
+		max = MaxPower;
+	else
+		max = s.MaxPower;
+	TSet res(max);
+	res.BitField = (this->BitField) & (s.BitField);
+	return res;
 }
 
 TSet TSet::operator~(void) // дополнение
 {
-	return *this;
+	TSet res(*this);
+	res.BitField = ~BitField;
+	return res;
 }
 
 // перегрузка ввода/вывода
