@@ -11,7 +11,10 @@ TBitField::TBitField(int len)
 {
 	if (len < 0)
 		throw 1;
-	MemLen = len/32+1;
+	if (len % 32 == 0)
+		MemLen = len / 32;
+	else
+	    MemLen = len/32+1;
 	BitLen = len;
 	pMem = new TELEM[MemLen];
 	for (int i = 0; i < MemLen; i++) {
@@ -31,6 +34,7 @@ TBitField::TBitField(const TBitField &bf) // конструктор копиро
 
 TBitField::~TBitField()
 {
+	delete[] pMem;
 }
 
 int TBitField::GetMemIndex(const int n) const // индекс Мем для бита n
@@ -91,6 +95,8 @@ int TBitField::GetBit(const int n) const // получить значение б
 
 TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 {
+	if (*this == bf)
+		throw 1;
 	delete [] pMem;
 	this->MemLen = bf.MemLen;
 	this->BitLen = bf.BitLen;
@@ -103,14 +109,15 @@ TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 
 int TBitField::operator==(const TBitField &bf) const // сравнение 
 {
-	if (MemLen != bf.MemLen) {
-		return 0;
+	if (MemLen == bf.MemLen) {
+
+		for (int i = 0; i < bf.MemLen; i++) {
+			if (pMem[i] != bf.pMem[i])
+				throw 1;
+		}
+		return 1;
 	}
-	for (int i = 0; i < bf.MemLen; i++) {
-		if (pMem[i] != bf.pMem[i])
-			return 0;
-	}
-	return 1;
+	else throw 1;
 
 }
 
@@ -180,7 +187,6 @@ TBitField TBitField::operator~(void) // отрицание
 istream &operator>>(istream &istr, TBitField &bf) // ввод
 {
 	
-		delete[] bf.pMem;
 		int a;
 		cout << "MemLen: ";
 		istr >> a;
